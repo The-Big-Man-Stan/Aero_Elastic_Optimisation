@@ -44,6 +44,3 @@ def get_alpha_sensitivities():
 			break
 	
 	return([lift_sensitivity,residual_sensitivity])
-[a,b] = get_alpha_sensitivities()
-print(a)
-print(b)
