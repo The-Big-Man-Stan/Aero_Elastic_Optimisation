@@ -1,0 +1,44 @@
+Currently I have made the read_taumesh.py file in the mods folder specific for the rae2822 mesh I have. To use these python scripts for different meshes, the scripts will have to be adapted to cater for different numbers of specified boundaries in the mesh.
+
+Tau_mesh read function psuedo code:
+1) Read in the mesh file
+
+2) Get all the Surface IDs belonging to each boundary
+
+3) Get Node IDs of each point belonging to each surface ID
+
+4) Separate Node IDs into which boundaries they belong
+
+5) Create a list containing the coordinates of the mesh points on each boundary
+
+6) As its 2D create array with only x and z data for both symmetry planes
+
+7) Compute a delaunay triangulation on the airfoil nodes and farfield nodes
+
+8) Find the area ratio coefficients for each mesh point after finding which Delaunay triangle they belong to
+
+9) Save this info into a file
+
+
+
+2nd script psuedo code
+1) Load data saved from last script
+
+2) Deform the airfoil points using a parameterisation method (lcst in this case)
+
+3) Map the mesh points to their new locations using Delaunay graph mapping method
+
+4) Write a new netcdf file containing this deformed mesh
+
+USER INPUT REQUIRED
+1) In my RAE2822 mesh I have 5 boundaries. data[0] corresponds to the boundary marker 1 in the mesh. For different meshes the boundary markers may represent different boundaries conditions so the names should be updated according to the mesh
+
+2) Similarly in the Find_volume_ratios.py script, an entry for number of boundaries is required for the script to work correctly
+
+**** A note on the delaunay_deform.py script ****
+For the rae2822 mesh I'm using currently, 
+the y=0 symmetry plane has NodeIDs from 0:35000, 
+the y=1 symmetry planehas NodeIDs from 35000:70000
+
+It may be possible that sometimes the y=1 plane doesn't always follow on directly in NodeID count. In this case, rather than copying the deformed mesh points at y=0 and simply row-stacking them to account for the mesh points at y=1, the y=1 mesh points will have to be added into the deformed_mesh_point array using the NodeID info stored in data_inner1[:,3] to add it into the array at the correct index
+
