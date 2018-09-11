@@ -4,8 +4,7 @@ import os
 def get_alpha_sensitivities():
 	# Use grep to get the Farfield-alpha sensitivities
 	command = 'grep Farfield-alpha log/adjoint.C-func.solver.stdout.0 >farfield_alpha_line'
-	os.system(command)
-	#process = subprocess.Popen(['grep','Farfield-alpha','log/adjoint.C-func.solver.stdout.0','>farfield_alpha_lines'])
+	subprocess.call(command,shell=True)
 	
 	# There are 2 instances of Fafield alpha in the log file and we are interested in the second
 	# instance
