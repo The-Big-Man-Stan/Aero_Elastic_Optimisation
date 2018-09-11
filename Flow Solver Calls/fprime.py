@@ -84,7 +84,42 @@ def fprime(lcst_parameters,flow_solver_run):
 	process  = subprocess.Popen(['mpirun','-n','7','ptau3d.turb1eq','rae2822.para_adjoint','log/adjoint.C-func','use_mpi'])
 	process.wait()
 	
-	# Compute adjoint for the lift
+	#
+	# Calculating the gradient section
+	#
+	# Create the Volgrad parameter file to get the sensitivity
+	process = subprocess.Popen(['cp','rae2822.para_adjoint','rae2822.para_volgrad'])
+	process.wait()
+	
+	with open('rae2822.para_volgrad','a') as myfile:
+		myfile.write('\n')
+		myfile.write('Primary grid filename: rae2822.taumesh_def')
+		myfile.write('\n')
+		myfile.write('Grid prefix: grid2/')
+		myfile.write('\n')
+		myfile.write('Solver type: Volgrad')
+		myfile.write('\n')
+		myfile.write('Automatic parameter update (0/1): 0')
+	
+	# Create del to use for each parameter when doing finite difference
+	delta = 0.00005*np.ones(len(lcst_parameters))
+	gradient = range(len(delta))
+	
+	# Create deformed meshes for each parameter
+	for i in range(len(delta)):
+		print('Volgrad iteration: ',str(i))
+		temp = copy.deepcopy(lcst_parameters)
+		temp[i] = lcst_parameters[i] + delta[i]
+		delaunay_deform(temp,'rae2822.taumesh_def') # This outputs the deformed mesh
+		process = subprocess.Popen(['ptau3d.preprocessing','rae2822.para_volgrad'])
+		process.wait()
+		process = subprocess.Popen(['mpirun','-n','7','ptau3d.turb1eq','rae2822.para_volgrad','log/log_file.volgrad','use_mpi'])
+		process.wait()
+		[alpha_drag_sensitivity,alpha_residual_sensitivity1] = get_alpha_sensitivities()
+		drag_sensitivity = get_sensitivity()
+		drag_gradient_term[i] = drag_sensitivity
+	
+	# Compute adjoint and gradient for the lift
 	# Obtain additional term for the gradient equation due to the implicit
 	# angle of attack variable which is used to ensure the correct lift is
 	# achieved
@@ -136,44 +171,8 @@ def fprime(lcst_parameters,flow_solver_run):
 		myfile.write('Preconditioning: (none)')
 	
 	# Submit adjoint job
-	process  = subprocess.Popen(['mpirun','-n','7','ptau3d.turb1eq','rae2822.para_adjoint_lift','log/adjoint_lift.C-func','use_mpi'])
+	process  = subprocess.Popen(['mpirun','-n','7','ptau3d.turb1eq','rae2822.para_adjoint_lift','log/adjoint.C-func','use_mpi'])
 	process.wait()
-	
-	#
-	# Calculating the gradient section
-	#
-	# Create the Volgrad parameter file to get the sensitivity
-	process = subprocess.Popen(['cp','rae2822.para_adjoint','rae2822.para_volgrad'])
-	process.wait()
-	
-	with open('rae2822.para_volgrad','a') as myfile:
-		myfile.write('\n')
-		myfile.write('Primary grid filename: rae2822.taumesh_def')
-		myfile.write('\n')
-		myfile.write('Grid prefix: grid2/')
-		myfile.write('\n')
-		myfile.write('Solver type: Volgrad')
-		myfile.write('\n')
-		myfile.write('Automatic parameter update (0/1): 0')
-	
-	# Create del to use for each parameter when doing finite difference
-	delta = 0.00005*np.ones(len(lcst_parameters))
-	gradient = range(len(delta))
-	
-	# Create deformed meshes for each parameter
-	for i in range(len(delta)):
-		print('Volgrad iteration: ',str(i))
-		temp = copy.deepcopy(lcst_parameters)
-		temp[i] = lcst_parameters[i] + delta[i]
-		delaunay_deform(temp,'rae2822.taumesh_def') # This outputs the deformed mesh
-		process = subprocess.Popen(['ptau3d.preprocessing','rae2822.para_volgrad'])
-		process.wait()
-		process = subprocess.Popen(['mpirun','-n','7','ptau3d.turb1eq','rae2822.para_volgrad','log/log_file.volgrad','use_mpi'])
-		process.wait()
-		[alpha_drag_sensitivity,alpha_residual_sensitivity1] = get_alpha_sensitivities()
-		drag_sensitivity = get_sensitivity()
-		drag_gradient_term[i] = drag_sensitivity
-		
 	
 	# Calculating the gradient section
 	#
