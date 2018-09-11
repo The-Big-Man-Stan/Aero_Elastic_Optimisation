@@ -19,7 +19,7 @@ def f(lcst_parameters):
 	# Flow solver part of optimisation
 	#
 	# Create the mesh file and update Volume ratio cofficients
-	delaunay_deform(lcst_parameters,'rae2822.taumesh1')
+	delaunay_deform(lcst_parameters,'TauFiles/LANN-Unstructured-Euler-mirrored.grid')
 	#process = subprocess.Popen(['python','Find_vol_ratios.py'])
 	#process.wait()
 	
