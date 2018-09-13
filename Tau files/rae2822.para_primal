@@ -1,0 +1,154 @@
+# Rae2822 Airfoil
+
+-----------------------------------------------------
+IO
+-----------------------------------------------------                       
+   Grid/Solution -----------------------------------: -
+                           Boundary mapping filename: rae2822.bmap
+                               Primary grid filename: rae2822.taumesh1
+                                         Grid prefix: grid/
+                                 Output files prefix: log/sim
+		 		 Restart-data prefix: (none)
+     Controls --------------------------------------: -
+                    Automatic parameter update (0/1): 1
+		      Tecplot ascii output precision: 1
+                                               Ascii: 1
+	         Write pointdata dimensionless (0/1): 0
+   Monitoring --------------------------------------: -
+                               Monitor history (0/1): 1
+               Extended coefficient monitoring (0/1): 1
+                      Residual monitoring type (0/1): 1
+                                   Monitoring values: Residual_C-lift_C-drag
+
+
+-----------------------------------------------------
+PREPROCESSING
+-----------------------------------------------------
+                          Number of multigrid levels: 1
+               Cache-coloring (0/max_faces in color): 50000
+                                 Point fusing reward: 1.2
+                          Structured grid coarsening: 0
+                          Sharp edge angle (degrees): 0
+                                        Output level: 20
+   Partitioning ------------------------------------: -
+                                   Number of domains: 7
+                         Type of partitioning (name): private
+   Additionals -------------------------------------: -
+                  2D offset vector (0 / x=1,y=2,z=3): 2
+                        Bandwidth optimisation (0/1): 1
+                         Compute lusgs mapping (0/1): 1
+
+
+-----------------------------------------------------
+SOLVER
+-----------------------------------------------------
+                   Inviscid flux discretization type: Central
+                          Central dissipation scheme: Scalar_dissipation
+                             Coarse grid upwind flux: Van_Leer
+                                         Upwind flux: AUSMDV
+                        Reconstruction of gradients : Least_square
+  Relaxation ---------------------------------------: -
+                                   Relaxation solver: Backward_Euler
+  Backward Euler  ----------------------------------: -
+                                       Linear solver: Lusgs
+                               Linear preconditioner: (none)
+                       Implicit overrelaxation omega: 1.0
+                        Implicit overrelaxation beta: 1
+  LUSGS --------------------------------------------: -
+                                  Sgs stages maximum: 3
+        Lusgs increased parallel communication (0/1): 1
+                  Lusgs treat whirl implicitly (0/1): 0
+                          Order of upwind flux (1-2): 2
+                 Order of additional equations (1-2): 1
+                               Increase memory (0/1): 1
+   Solver/Dissipation ------------------------------: -
+                Matrix dissipation terms coefficient: 0.5
+                   2nd order dissipation coefficient: 0.5
+           Inverse 4th order dissipation coefficient: 64
+                             Ausm scheme dissipation: 0.25
+                        Limiter freezing convergence: 0
+                                     Preconditioning: (none)
+                                       Cut-off value: 1.5
+   Timestepping Start/Stop -------------------------: -
+                                       Output period: 100000
+                            Maximal time step number: 100000
+                                    Minimum residual: 1e-5
+                           Matching iteration period: 10
+   Timestep Settings -------------------------------: -
+                        Number of Runge-Kutta stages: 3
+                                          CFL number: 20
+   MG-----------------------------------------------: -
+                             MG description filename: sg
+   MG-Smoothing ------------------------------------: -
+                                   Residual smoother: Point_explicit
+                                 Correction smoother: Point_explicit
+                           Correction smooth epsilon: 0.2
+                             Residual smooth epsilon: 0.2002
+                          Correction smoothing steps: 2
+                            Residual smoothing steps: 2
+                          Smoothing relaxation steps: 2
+   MG Start up -------------------------------------: -
+                               Multigrid start level: 1
+   Internal flow -----------------------------------: -
+                         Init total conditions (0/1): 0
+   References --------------------------------------: -
+                                Reference temperature: 288.15
+                                Reference Mach number: 0.725
+                                      Reynolds number: 6.5e+6
+                                      Reynolds length: 1.0
+                                       Prandtl number: 0.716
+                                   Gas constant gamma: 1.4
+    Geometry ----------------------------------------: -
+                                           Grid scale: 1.0
+                              Reference relation area: 0.0
+                 Reference length (pitching momentum): 1.0
+           Reference length (rolling/yawing momentum): 1.0
+                                  Origin coordinate x: 0.0
+                                  Origin coordinate y: 0.0
+                                  Origin coordinate z: 0.0
+    Turbulence --------------------------------------: -
+                             Turbulence model version: SAO
+       Boussinesq modification for k-production (0/1): 0
+             Turbulence equations use multigrid (0/1): 0
+        Turbulence diffusion flux type TSL/Full (0/1): 0
+                     Viscous flux type TSL/Full (0/1): 0
+			       Ratio Prandtl lam/turb: 0.8
+                            General ratio mue-t/mue-l: 0.1
+                            Maximum limit mue-t/mue-l: 20000
+                          General turbulent intensity: 0.001
+                               Reference bl-thickness: 1e+22
+	    Maximum turbulence production/destruction: 1000
+                           SA boundary condition type: smooth
+			Omega boundary condition type: smooth_standard
+Neglect 2/3 rho k term in k and omega production (0/1): 1
+                                  K-omega wall factor: 10
+                     Kato Launder modification factor: 1
+                              K-omega limitation type: standard
+                                            Minimum k: 1e-06
+                                        Minimum omega: 1e-06          
+				    Positivity scheme: 0
+                                EARSM expansion order: 1
+                       Vortical flow correction (0/1): 0
+                                 SAS correction (0/1): 0
+                           LES/DES filter width model: (none)
+                     Unsteady physical time step size: -2
+
+-----------------------------------------------------
+Surface output
+-----------------------------------------------------
+                     Surface output period: 999999
+           Surface output description file: (thisfile)
+                     Surface output values: xyz_cp_mach_macht_wdist_muetmue_Ptot_vort_temp_k1_k2_v_cf_cfxyz_p_rho_Rk_Rw_Rrho_Rv_fnormal_yplus
+			    
+------------------------------------------------------
+Extra field pointdata output
+------------------------------------------------------
+             Field output description file: (thisfile)
+                       Field output values: xyz_cp_mach_macht_wdist_muetmue_Ptot_vort_temp_k1_k2_v_cf_p_rho_Rk_Rw_Rrho_Rv_gradp_gradrho_hp_hmach
+
+
+
+    solver at Tue May 29 18:59:03 2018
+                                  Restart-data prefix: log/sim.pval.7042 
+    solver at Tue May 29 18:59:05 2018
+                              Surface output filename: log/sim.surface.pval.7042 
